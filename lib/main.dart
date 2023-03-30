@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: ((ctx) => Products()),
+      create: ((ctx) => Products()), // for a list or maps (extendend items).
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
