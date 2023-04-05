@@ -8,6 +8,7 @@ import '../widgets/cart_item.dart';
 
 class CartScreen extends StatelessWidget {
   static const routeName = '/cart-screen';
+  var _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +47,13 @@ class CartScreen extends StatelessWidget {
                         cart.clear();
                       },
                       textColor: Theme.of(context).primaryColor,
-                      child: const Text(
-                        'ORDER NOW',
-                      ),
+                      child: _isLoading
+                          ? Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : const Text(
+                              'ORDER NOW',
+                            ),
                     ),
                   ],
                 )),
