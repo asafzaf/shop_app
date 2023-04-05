@@ -30,19 +30,28 @@ class Orders with ChangeNotifier {
     final url = Uri.https(
         'shop-app-1296b-default-rtdb.europe-west1.firebasedatabase.app',
         '/orders.json');
+    final timestamp = DateTime.now();
     try {
       final response = await http.post(
         url,
         body: json.encode({
-          'cartProducts': cartProducts,
-          'total': total,
+          'amount': total,
+          'dateTime': timestamp.toIso8601String(),
+          'products': cartProducts
+              .map((cp) => {
+                    'id': cp.id,
+                    'title': cp.title,
+                    'quantity': cp.quantity,
+                    'price': cp.price,
+                  })
+              .toList(),
         }),
       );
       final newOrder = OrderItem(
         amount: total,
         id: json.decode(response.body)['name'],
         products: cartProducts,
-        dateTime: DateTime.now(),
+        dateTime: timestamp,
       );
       _orders.insert(0, newOrder);
     } catch (error) {
