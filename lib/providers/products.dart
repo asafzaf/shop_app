@@ -44,6 +44,10 @@ class Products with ChangeNotifier {
 
   // var _showFavoritesOnly = false;
 
+  final String authToken;
+
+  Products(this.authToken, this._items);
+
   List<Product> get items {
     // if (_showFavoritesOnly) {
     //   return _items.where((prodItem) => prodItem.isFavorite).toList();
@@ -72,10 +76,12 @@ class Products with ChangeNotifier {
   Future<void> fetchAndSetProducts() async {
     final url = Uri.https(
         'shop-app-1296b-default-rtdb.europe-west1.firebasedatabase.app',
-        '/products.json');
+        '/products.json',
+        {'auth': '$authToken'});
+
     try {
       final response = await http.get(url);
-      print(response.body);
+      // print('(1)' + response.body);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       if (extractedData == null) {
         return;
@@ -103,7 +109,8 @@ class Products with ChangeNotifier {
   Future<void> addProduct(Product product) async {
     final url = Uri.https(
         'shop-app-1296b-default-rtdb.europe-west1.firebasedatabase.app',
-        '/products.json');
+        '/products.json',
+        {'auth': '$authToken'});
     try {
       final response = await http.post(
         url,
@@ -138,7 +145,8 @@ class Products with ChangeNotifier {
       try {
         final url = Uri.https(
             'shop-app-1296b-default-rtdb.europe-west1.firebasedatabase.app',
-            '/products/$id.json');
+            '/products/$id.json',
+            {'auth': '$authToken'});
         await http.patch(url,
             body: json.encode({
               'title': newProduct.title,
@@ -160,7 +168,8 @@ class Products with ChangeNotifier {
   Future<void> deleteProduct(String id) async {
     final url = Uri.https(
         'shop-app-1296b-default-rtdb.europe-west1.firebasedatabase.app',
-        '/products/$id.json');
+        '/products/$id.json',
+        {'auth': '$authToken'});
     final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
     var existingProduct = _items[existingProductIndex];
     _items.removeAt(existingProductIndex);
